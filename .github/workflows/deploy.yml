@@ -38,7 +38,7 @@ jobs:
           BRANCH=$(node -e "
             const branchNameToEnvMap = {
               pretest: 'pretest',
-              test: 'dev',
+              test: 'test',
               acc: 'release',
               prod: 'master',
               llinkiddemo: 'llinkiddemo',
