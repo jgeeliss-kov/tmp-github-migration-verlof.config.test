@@ -22,7 +22,7 @@ jobs:
           token: ${{ secrets.ACTIONS_GITHUB_TOKEN }}
           # path: ./${{ env.DEPLOYMENT_REQUESTS_REPO }}
 
-      - name: send deployment request to repo deployment-requests
+      - name: determine what to deploy
         run: |
           ### set some variables (REPO, COMMIT, ENV>) ###
           REPO_SPLIT=($(node -e "
@@ -31,6 +31,7 @@ jobs:
             console.log(configRepoSplit[0], configRepoSplit[1]);
           "))
           REPO="${REPO_SPLIT[0]}"
+          echo "REPO="${REPO}" >> $GITHUB_ENV
           ENV="${REPO_SPLIT[1]}"
 
           ### translate env name to the corresponding branch ###
@@ -61,7 +62,6 @@ jobs:
           COMMIT=$(git rev-parse --short HEAD)
 
           (
-            # cd ./${{ env.DEPLOYMENT_REQUESTS_REPO }}
             ls
             git config user.email "${REPO}-bitbucket-pipeline@katholiekonderwijs.vlaanderen"
             git config user.name "${REPO}"
