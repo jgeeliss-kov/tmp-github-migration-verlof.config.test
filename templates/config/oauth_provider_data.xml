@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <record id="doko_provider" model="auth.oauth.provider">
+        <field name="name">Katholiek onderwijs</field>
+        <field name="client_id"><%- oauthConfig.clientID %></field>
+        <field name="client_secret"><%- oauthConfig.clientSecret %></field>
+        <field name="enabled">True</field>
+        <field name="is_doko">True</field>
+        <field name="is_test_doko">False</field>
+        <field name="header_key_test">VSKO-ACCESSTOKEN-ACC-ELEARNING</field>
+        <field name="header_value_test">4a99d363-c50e-4566-a631-d0be9e2289e9</field>
+        <field name="body">Katholiek onderwijs</field>
+        <field name="auth_endpoint">https://<%- vskoEnv %>oauth.katholiekonderwijs.vlaanderen/authenticate</field>
+        <field name="scope">username</field>
+        <field name="validation_endpoint">https://<%- vskoEnv %>oauth.katholiekonderwijs.vlaanderen/token</field>
+        <field name="data_endpoint">https://<%- vskoEnv %>oauth.katholiekonderwijs.vlaanderen/username</field>
+        <field name="redirect_uri">https://<%- vskoEnv %>verlof.katholiekonderwijs.vlaanderen/auth_oauth/signin</field>
+        <field name="vsko_accesstoken_test">a4f16ffe-32db-11e6-ac61-9e71128cae77</field>
+        <field name="vsko_accesstoken_acc">d03302ae-32db-11e6-ac61-9e71128cae77</field>
+    </record>
+</odoo>

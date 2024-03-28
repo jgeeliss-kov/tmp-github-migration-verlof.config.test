@@ -1,0 +1,48 @@
+image: node:16
+
+definitions:
+  steps:
+    - step: &addConfigToDockerAndDeployDockerToAWS
+        name: "Add config to docker image and deploy to AWS"
+        script:
+          - |
+            # clone the repo containing the deploy scripts and initialize:
+            git clone -b acc git@bitbucket.org:vskovzw/kov-bb-aws-utils.git \
+              && source kov-bb-aws-utils/lib.bash
+          - |
+            # template the config files and add them to the Docker image:
+            template_backend_config_files
+            fetch_Dockerfile_from_main_repo
+            AWS_PROFILE="KOV_TOOLING" UNCONFIGURED_STAGE="$(get_docker_ecr_url)" DOCKER_TAG="$(cat TAG)-${BITBUCKET_COMMIT}-${CONFIG_ENV}" docker_build_stage configured_build
+          - |
+            # deploy the Docker to AWS:
+            update_image_tag_in_SSM
+            update_fargate_service_and_jobs
+
+pipelines:
+  custom:
+    clear-filestore:
+      - step:
+          name: "clear the entire filestore EFS volume mounted on /var/lib/odoo"
+          script:
+            - git clone -b main git@bitbucket.org:vskovzw/kov-bb-aws-utils.git && source kov-bb-aws-utils/lib.bash
+            - clear_efs
+    clear-db:
+      - step:
+          name: "drop entire database"
+          script:
+            - git clone -b main git@bitbucket.org:vskovzw/kov-bb-aws-utils.git && source kov-bb-aws-utils/lib.bash
+            - clear_db
+    clear-cache:
+      - step:
+          name: "clear cache on CDN"
+          script:
+            - git clone -b main git@bitbucket.org:vskovzw/kov-bb-aws-utils.git && source kov-bb-aws-utils/lib.bash
+            - invalidate_cloudfront_backend
+
+  branches:
+    '{master,main}':
+      - step: *addConfigToDockerAndDeployDockerToAWS
+
+options:
+  docker: true

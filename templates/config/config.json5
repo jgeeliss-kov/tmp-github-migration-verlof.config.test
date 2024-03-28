@@ -1,0 +1,18 @@
+{
+  odooAdminPassword: '<%- ecs.adminPassword %>',
+  // installedModules: [ 'verlof', 'kerndata_client', 'kov_kerndata_update', 'kerndata_security_rule', 'kov_oauth' ],
+  odooConf: {
+    db_host: '<%- db.host %>',
+    db_port: '<%- db.port %>',
+    db_user: '<%- db.user %>',
+    db_password: '<%- db.password %>',
+    db_name: '<%- db.name %>',
+    db_sslmode: 'require',
+    admin_passwd: '<%- db.masterPassword %>',
+    without_demo: 'all',
+    workers: 2,
+    limit_time_cpu: 4600,
+    limit_time_real: 8200,
+    language: 'nl_BE',
+  },
+}
