@@ -46,6 +46,7 @@ jobs:
             console.log(branchNameToEnvMap['${ENV}'] || '');
           ")
           echo "ENV=${ENV}" >> $GITHUB_ENV
+          echo "BRANCH=${BRANCH}" >> $GITHUB_ENV
           echo "We will try to deploy ${REPO} branch ${BRANCH} to the ${ENV} environment."
           ############################################################
 
@@ -59,14 +60,13 @@ jobs:
         if: env.ENV != ''
         run: |
           ### request deployment (by adding a commit to deployment-requests repo) ###
-          COMMIT=$(git rev-parse --short HEAD)
 
           (
             ls
             git config user.email "${REPO}-bitbucket-pipeline@katholiekonderwijs.vlaanderen"
             git config user.name "${REPO}"
             git pull \
-              && git commit --allow-empty -m "{ \"request\": \"DEPLOYMENT\", \"repo\": \"${REPO}\", \"env\": \"${ENV}\", \"commitHash\": \"${COMMIT}\", \"emailAddresses\": ${SEND_EMAILS_TO} }" \
+              && git commit --allow-empty -m "{ \"request\": \"DEPLOYMENT\", \"repo\": \"${REPO}\", \"env\": \"${ENV}\", \"commitHash\": \"${BRANCH}\", \"emailAddresses\": ${SEND_EMAILS_TO} }" \
               && git push
           )
           ############################################################
