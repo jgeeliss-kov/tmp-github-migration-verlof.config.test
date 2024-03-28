@@ -31,7 +31,7 @@ jobs:
             console.log(configRepoSplit[0], configRepoSplit[1]);
           "))
           REPO="${REPO_SPLIT[0]}"
-          echo "REPO="${REPO}" >> $GITHUB_ENV
+          echo "REPO=${REPO}" >> $GITHUB_ENV
           ENV="${REPO_SPLIT[1]}"
 
           ### translate env name to the corresponding branch ###
