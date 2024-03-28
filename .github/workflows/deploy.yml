@@ -66,7 +66,7 @@ jobs:
             git config user.email "${REPO}-bitbucket-pipeline@katholiekonderwijs.vlaanderen"
             git config user.name "${REPO}"
             git pull \
-              && git commit --allow-empty -m "{ \"request\": \"DEPLOYMENT\", \"repo\": \"${REPO}\", \"env\": \"${ENV}\", \"commitHash\": \"${BRANCH}\", \"emailAddresses\": ${SEND_EMAILS_TO} }" \
+              && git commit --allow-empty -m "{ \"request\": \"DEPLOYMENT\", \"repo\": \"verlof\", \"env\": \"${ENV}\", \"commitHash\": \"${BRANCH}\", \"emailAddresses\": ${SEND_EMAILS_TO} }" \
               && git push
           )
           ############################################################
