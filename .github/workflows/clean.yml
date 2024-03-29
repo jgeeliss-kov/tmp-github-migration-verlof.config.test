@@ -11,6 +11,12 @@ on:
           - CLEAR_FILESTORE
           - DROP_DATABASE
 
+env:
+  DEPLOYMENT_REQUESTS_PROJECT: "jgeeliss-kov"
+  DEPLOYMENT_REQUESTS_REPO: "tmp-github-migration-deployment-requests"
+  SEND_EMAILS_TO: '["johannes.govaerts@katholiekonderwijs.vlaanderen", "frederik.tilkin@katholiekonderwijs.vlaanderen", "jesse.geelissen@katholiekonderwijs.vlaanderen"]'
+  REPO_NAME: "${{ github.event.repository.name }}" 
+
 jobs:
   clean:
     runs-on: ubuntu-latest
