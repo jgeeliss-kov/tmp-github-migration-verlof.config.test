@@ -50,14 +50,7 @@ jobs:
           echo "We will try to deploy ${REPO} branch ${BRANCH} to the ${ENV} environment."
           ############################################################
 
-          ### exit if ENV not set (if we are on a branch that should not be deployed) ###
-          if [ "${ENV}" = "" ]; then
-            echo "ENV not set, we assume this is a branch that should not be deployed automatically, exiting..."
-          fi
-          ############################################################
-
       - name: send deployment request to repo deployment-requests
-        if: env.ENV != ''
         run: |
           ### request deployment (by adding a commit to deployment-requests repo) ###
 

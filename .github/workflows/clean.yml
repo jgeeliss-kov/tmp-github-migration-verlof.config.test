@@ -1,0 +1,59 @@
+name: Clean
+
+on:
+  workflow_dispatch:
+    inputs:
+      type_clean:
+        type: choice
+        description: What would you like to delete?
+        options:
+          - CLEAR_CACHE
+          - CLEAR_FILESTORE
+          - DROP_DATABASE
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send greeting
+        run: echo "${{ github.event.inputs.message }} ${{ fromJSON('["", "🥳"]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
+
+
+    steps:
+      - name: clone the deployment-requests repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ env.DEPLOYMENT_REQUESTS_PROJECT }}/${{ env.DEPLOYMENT_REQUESTS_REPO }}
+          token: ${{ secrets.ACTIONS_GITHUB_TOKEN }}
+
+      - name: determine what to deploy
+        run: |
+          ### set some variables (REPO, COMMIT, ENV>) ###
+          REPO_SPLIT=($(node -e "
+            const configRepo = '${REPO_NAME}';
+            const configRepoSplit = configRepo.split('.config.');
+            console.log(configRepoSplit[0], configRepoSplit[1]);
+          "))
+          REPO="${REPO_SPLIT[0]}"
+          echo "REPO=${REPO}" >> $GITHUB_ENV
+          ENV="${REPO_SPLIT[1]}"
+          echo "ENV=${ENV}" >> $GITHUB_ENV
+          echo "We will try to do a ${{ github.event.inputs.type_clean }} of ${REPO} on the ${ENV} environment."
+          ############################################################
+
+      - name: send clean request to repo deployment-requests
+        if: env.ENV != ''
+        run: |
+          ### request deployment (by adding a commit to deployment-requests repo) ###
+
+          (
+            # cd ./${{ env.DEPLOYMENT_REQUESTS_REPO }}
+            ls
+            git config user.email "${REPO}-bitbucket-pipeline@katholiekonderwijs.vlaanderen"
+            git config user.name "${REPO}"
+            git pull \
+              && git commit --allow-empty -m "{ \"request\": \"${{ github.event.inputs.type_clean }}\", \"repo\": \"verlof\", \"env\": \"${ENV}\", \"commitHash\": \"n/a\", \"emailAddresses\": [] }" \
+              && git push
+          )
+          ############################################################
